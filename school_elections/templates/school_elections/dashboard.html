@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-container">
+    <p class="welcome-message">Welcome, {{ user.username|capfirst }}!</p>
+
+    <a href="{% url 'vote' %}" class="vote-link">Cast your vote</a>
+
+    <div class="dashboard-cards">
+        <div class="dashboard-card">
+            <h3>Your Voting Status</h3>
+            <p>{% if user.vote_set.exists %}✅ You have voted.{% else %}❌ You haven't voted yet.{% endif %}</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>View Results</h3>
+            <p>See how each candidate is performing in real time.</p>
+            <a href="{% url 'results' %}" class="button-small">View Results</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>About the Election</h3>
+            <p>This election helps choose leaders for the school. Voting is secret and secure.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

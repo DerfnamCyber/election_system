@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="results-wrapper">
+  <h2 class="results-title">Election Results</h2>
+
+  {% if results %}
+    {% for position, candidates in results.items %}
+      <div class="results-section">
+        <h3 class="position-name">{{ position }}</h3>
+        <ul class="candidate-results">
+          {% for name, vote_count in candidates %}
+            <li class="candidate-result">{{ name }} - {{ vote_count }} votes</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="no-results">No results available.</p>
+  {% endif %}
+</div>
+{% endblock %}
