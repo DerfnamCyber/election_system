@@ -9,8 +9,6 @@ from django.contrib import messages
 from collections import defaultdict
 from django.utils.text import slugify
 
-
-
 def user_login(request):
     
     if request.user.is_authenticated:
@@ -79,7 +77,6 @@ def results_view(request):
         results[positions[key]] = [(c.name, 
                                     Vote.objects.filter(candidate=c).count()) for c in candidates]
         
-    print("RESULTS:", results)
     return render(request, 'school_elections/results.html', {'results':results})
 
 
