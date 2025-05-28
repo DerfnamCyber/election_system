@@ -1,38 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h2>Cast Your Vote</h2>
 
 {% if not voted %}
-  <form method="post">
-    {% csrf_token %}
-    
-    {% for position, candidates in grouped_candidates.items %}
-      <div class="election-section">
-        <div class="position-title">{{ position }}</div>
-        
-        {% for candidate in candidates %}
-          <div class="candidate-card">
-            <img src="{{ candidate.photo.url|default:'https://via.placeholder.com/120' }}" alt="{{ candidate.name }}">
-            
-            <div class="candidate-info">
-              <h4>{{ candidate.name }} ({{ candidate.get_position_display }})</h4>
-              <p>{{ candidate.manifesto }}</p>
-              <div class="vote-input">
-                <label>
-                  <input type="radio" name="{{ position|slugify }}" value="{{ candidate.id }}">
+<form method="post">
+  {% csrf_token %}
+
+  {% for position, candidates in grouped_candidates.items %}
+  <div class="election-section">
+    <div class="position-title">{{ position }}</div>  
+
+      {% for candidate in candidates %}
+      <div class="candidate-card">
+        <img src="{{ candidate.photo.url|default:'https://via.placeholder.com/120' }}" alt="{{ candidate.name }}">
+
+        <div class="candidate-info">
+          <h4>{{ candidate.name }} ({{ candidate.get_position_display }})</h4>
+          <p>{{ candidate.manifesto }}</p>
+          <div class="vote-input">
+            <label>
+              <input type="radio" name="position_{{ position }}" value="{{ candidate.id }}">
                   Vote for {{ candidate.name }}
-                </label>
-              </div>
-            </div>
+            </label>
           </div>
-        {% endfor %}
+        </div>
       </div>
     {% endfor %}
+  </div>
+  {% endfor %}
 
-    <button type="submit" class="submit-button">Submit Vote</button>
-  </form>
+  <button type="submit" class="submit-button">Submit Vote</button>
+</form>
 {% else %}
   <p class="already-voted">You have already voted. Thank you!</p>
 {% endif %}
-{% endblock %}
+
+{% endblock %} 

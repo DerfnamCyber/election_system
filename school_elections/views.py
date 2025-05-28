@@ -43,31 +43,22 @@ def dashboard(request):
         
     return render(request, 'school_elections/dashboard.html')
 
-# @login_required
-# def vote_view(request):
-#     if Vote.objects.filter(voter=request.user).exists():
-#         return render(request, 'school_elections/vote.html', {'voted': True})
-
-#     if request.method == 'POST':
-#         form = VoteForm(request.POST)
-#         if form.is_valid():
-#             for position, candidate in form.cleaned_data.items():
-#                 Vote.objects.create(voter=request.user, candidate=candidate)
-#             return redirect('results')
-#     else:
-#         form = VoteForm()
-
-#     candidates = Candidate.objects.all()
-#     return render(request, 'school_elections/vote.html', {'form': form, 'voted': False, 'candidates': candidates})
-
-
-
-
 
 @login_required
 def vote_view(request):
+
     if Vote.objects.filter(voter=request.user).exists():
         return render(request, 'school_elections/vote.html', {'voted': True})
+
+    if request.method == 'POST':
+        for key, value in request.POST.items():
+            if key.startswith("position_"):  
+                try:
+                    candidate = Candidate.objects.get(id=value)
+                    Vote.objects.create(voter=request.user, candidate=candidate)
+                except Candidate.DoesNotExist:
+                    continue
+        return redirect('results') 
 
     grouped = defaultdict(list)
     for candidate in Candidate.objects.all():
@@ -77,6 +68,7 @@ def vote_view(request):
         'voted': False,
         'grouped_candidates': dict(grouped)
     })
+
 
 @login_required
 def results_view(request):
